@@ -1,60 +1,90 @@
-# 🩺 MediBook — Doctor Appointment Booking System
+# 🩺 MediBook — Doctor Appointment Booking Platform
 
-A full-featured React app with **Patient** and **Doctor** portals.
+MediBook is a full-stack healthcare appointment booking system that connects patients with doctors through three dedicated portals. Patients can discover doctors, book appointments through a guided multi-step flow, and rate their experience after a visit. Doctors can accept or reject incoming requests, manage their daily schedule, and mark consultations complete. Admins get a dashboard to monitor overall platform activity.
 
 ## Features
 
 ### Patient Portal
-- Register / Login
-- **Book Appointment** — 5-step wizard: pick doctor → date → time slot → details → confirm
-- View, reschedule, cancel appointments
-- **Rate & review** doctor after appointment is completed
-- Profile management (personal + medical info)
+- Register and log in with JWT-based authentication
+- Browse and search doctors by name or specialty
+- Book appointments through a guided multi-step flow (doctor → date → time slot → reason/symptoms → confirmation)
+- View, reschedule, or cancel appointments
+- Rate and review doctors after a completed appointment
+- Manage personal profile and medical history (blood group, allergies, medical history)
 
 ### Doctor Portal
-- Login with pre-seeded doctor accounts
-- **Requests dashboard** — Accept ✓ / Reject ✕ each pending booking, add notes
-- **Mark Complete** — click when consultation is done, patients can then rate
-- **Schedule view** — calendar strip showing daily appointments
-- **Profile** — view ratings and patient reviews
+- View and manage incoming appointment requests
+- Accept or reject bookings with an optional note to the patient
+- Mark completed appointments, unlocking the patient rating flow
+- View a day-by-day schedule of upcoming appointments
+- View profile stats, average rating, and patient reviews
 
-## Run Locally
-
-```bash
-# 1. Install dependencies
-npm install
-
-# 2. Start development server
-npm start
-# Opens at http://localhost:3000
-```
-
-## Doctor Login Credentials (pre-seeded)
-
-| Doctor | Email | Password |
-|--------|-------|----------|
-| Dr. Priya Sharma (Cardiologist) | sharma@medibook.com | doctor123 |
-| Dr. Arjun Mehta (Neurologist) | mehta@medibook.com | doctor123 |
-| Dr. Sneha Kulkarni (Dermatologist) | kulkarni@medibook.com | doctor123 |
-| Dr. Rohit Patil (Orthopedic) | patil@medibook.com | doctor123 |
-| Dr. Anita Desai (Pediatrician) | desai@medibook.com | doctor123 |
-| Dr. Vikram Joshi (General Physician) | joshi@medibook.com | doctor123 |
-
-## Patient Flow
-1. Register → Login
-2. Click **Book Appointment** → select doctor → pick date → pick time → describe reason → confirm
-3. Appointment shows as **Pending** until doctor accepts
-4. Once doctor marks **Completed**, patient can ⭐ Rate the doctor
-
-## Deploy to Netlify
-```bash
-npm run build
-# Drag the /build folder to netlify.com/drop
-```
+### Admin Dashboard
+- Monitor total patients, total doctors, today's appointments, and pending requests
+- View doctor demand and booking volume per specialty
+- Search registered patients
+- View top-rated doctors and review counts
 
 ## Tech Stack
-- React 18 (CRA)
-- React Router DOM
-- Lucide React (icons)
-- Google Fonts (DM Serif Display + DM Sans)
-- No backend — state managed in React Context (localStorage can be added)
+
+| Layer          | Technology                          |
+|----------------|--------------------------------------|
+| Frontend       | React, React Router, Context API     |
+| Backend        | Node.js, Express                      |
+| Database       | SQLite (`sqlite3`, `bcryptjs`)        |
+| Icons          | Lucide React                          |
+
+## Getting Started
+
+### Prerequisites
+- Node.js (v16 or later recommended)
+- npm
+
+### Installation
+
+```bash
+git clone https://github.com/<your-username>/medibook.git
+cd medibook
+npm install
+```
+
+### Running the app
+
+Start the backend API server:
+
+```bash
+npm run server
+```
+
+In a separate terminal, start the React frontend:
+
+```bash
+npm start
+```
+
+The app will be available at `http://localhost:3000`, with the API running at `http://localhost:5000`.
+
+### Environment Variables
+
+Create a `.env` file in the `server/` directory for secrets such as your JWT signing key:
+
+```
+JWT_SECRET=your_secret_key_here
+PORT=5000
+```
+
+## Database
+
+MediBook uses SQLite for persistence. The schema is defined in `server/database.js` and includes the following tables: `users`, `doctors`, `patients`, `appointments`, and `reviews`. The database file is excluded from version control via `.gitignore` — running the server for the first time will create a fresh local database automatically.
+
+## Roadmap / Ideas
+
+- Email or SMS appointment reminders
+- Doctor availability calendar editing from the doctor portal
+- Payment integration for consultation fees
+- Video consultation support
+
+## License
+
+This project is open source and available for personal or educational use. Add a license file (e.g. MIT) if you plan to distribute or accept contributions.
+
