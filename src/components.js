@@ -28,7 +28,7 @@ export function Input({ label, error, textarea, ...props }) {
     width: '100%', padding: '10px 13px',
     background: 'var(--surface)',
     border: `1.5px solid ${error ? 'var(--danger)' : 'var(--surface-border)'}`,
-    borderRadius: 9, color: 'var(--white)', fontSize: 14,
+    borderRadius: 9, color: 'var(--surface-text)', fontSize: 14,
   };
   return (
     <div style={{ marginBottom: 16 }}>

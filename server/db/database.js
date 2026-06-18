@@ -115,15 +115,36 @@ const initDb = (onReady) => {
             if (onReady) onReady(createErr);
             return;
           }
-          // Seed any missing doctors/patients from users table
-          seedDoctorsAndPatients(() => {
-            if (onReady) onReady(null);
+          // Seed admin + any missing doctors/patients from users table
+          seedAdmin(() => {
+            seedDoctorsAndPatients(() => {
+              if (onReady) onReady(null);
+            });
           });
         });
       }
     );
   });
 };
+
+function seedAdmin(done) {
+  const ADMIN_EMAIL = 'admin@medibook.com';
+  const ADMIN_PASSWORD = 'admin123';
+  db.get('SELECT id FROM users WHERE email = ?', [ADMIN_EMAIL], (err, row) => {
+    if (err) { console.error('Error checking admin:', err); return done(); }
+    if (row) return done(); // admin already exists
+    const hashed = bcrypt.hashSync(ADMIN_PASSWORD, 10);
+    db.run(
+      'INSERT INTO users (name, email, password, role) VALUES (?, ?, ?, ?)',
+      ['Admin', ADMIN_EMAIL, hashed, 'admin'],
+      function (insertErr) {
+        if (insertErr) console.error('Error seeding admin:', insertErr);
+        else console.log('Auto-seeded admin user (admin@medibook.com)');
+        done();
+      }
+    );
+  });
+}
 
 function seedDoctorsAndPatients(done) {
   let pending = 2; // two async seed groups

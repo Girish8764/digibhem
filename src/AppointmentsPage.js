@@ -105,7 +105,7 @@ export default function AppointmentsPage({ setPage }) {
                       <div style={{ display:'flex', gap:20, flexWrap:'wrap', marginBottom:10 }}>
                         <span style={{ fontSize:13, color:'var(--text-light)' }}>📅 {fmt(appt.date)}</span>
                         <span style={{ fontSize:13, color:'var(--text-light)' }}>🕐 {appt.slot}</span>
-                        <span style={{ fontSize:13, color:'var(--gold)' }}>₹{appt.doctorFee}</span>
+                        <span style={{ fontSize:13, fontWeight:600, color:'var(--gold)' }}>₹ <span style={{ color:'var(--gold)', fontWeight:600 }}>{appt.doctorFee}</span></span>
                       </div>
                       {appt.reason && <p style={{ fontSize:13, color:'var(--text-light)', marginBottom:6 }}>📝 {appt.reason}</p>}
                       {appt.doctorNote && <p style={{ fontSize:12, color:'#4ab3f4', background:'rgba(74,179,244,0.08)', padding:'6px 10px', borderRadius:7, marginBottom:8 }}>👨‍⚕️ Doctor's note: {appt.doctorNote}</p>}

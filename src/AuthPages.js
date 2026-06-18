@@ -2,15 +2,15 @@ import React, { useState, useEffect } from 'react';
 import { useApp } from './AppContext';
 import { Btn, Input } from './components';
 
-function Panel({ children }) {
+function Panel({ children, theme, toggleTheme }) {
   return (
-    <div style={{ minHeight: '100vh', display: 'flex', background: 'linear-gradient(135deg,#091830 0%,#0d2040 50%,#081525 100%)' }}>
+    <div style={{ minHeight: '100vh', display: 'flex', background: theme === 'light' ? '#ffffff' : 'linear-gradient(135deg,#091830 0%,#0d2040 50%,#081525 100%)' }}>
       {/* Decorative left */}
-      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', padding: 48, borderRight: '1px solid rgba(0,180,166,0.15)', background: 'radial-gradient(ellipse at 30% 50%, rgba(0,180,166,0.08) 0%, transparent 70%)' }} className="auth-left">
+      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', padding: 48, borderRight: theme === 'light' ? '1px solid #e0e0e0' : '1px solid rgba(0,180,166,0.15)', background: theme === 'light' ? '#f5f5f5' : 'radial-gradient(ellipse at 30% 50%, rgba(0,180,166,0.08) 0%, transparent 70%)' }} className="auth-left">
         <div style={{ maxWidth: 380 }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 14, marginBottom: 40 }}>
             <div style={{ width: 50, height: 50, borderRadius: 14, background: 'var(--teal)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 24 }}>🩺</div>
-            <div><div style={{ fontFamily: 'DM Serif Display', fontSize: 30 }}>MediBook</div><div style={{ fontSize: 12, color: 'var(--text-light)' }}>Smart Healthcare Booking</div></div>
+            <div><div style={{ fontFamily: 'DM Serif Display', fontSize: 30, color: theme === 'light' ? '#000' : '#fff' }}>MediBook</div><div style={{ fontSize: 12, color: theme === 'light' ? '#666' : 'var(--text-light)' }}>Smart Healthcare Booking</div></div>
           </div>
           {[['🏥','Top Specialists','Access cardiologists, neurologists & more'],
             ['📅','Easy Scheduling','Book, reschedule, cancel in seconds'],
@@ -18,14 +18,19 @@ function Panel({ children }) {
             ['🔒','Secure & Private','Your health data is encrypted']].map(([icon, t, d]) => (
             <div key={t} style={{ display: 'flex', gap: 16, marginBottom: 22, alignItems: 'flex-start' }}>
               <span style={{ fontSize: 22 }}>{icon}</span>
-              <div><p style={{ fontWeight: 600, marginBottom: 2 }}>{t}</p><p style={{ fontSize: 13, color: 'var(--text-light)' }}>{d}</p></div>
+              <div><p style={{ fontWeight: 600, marginBottom: 2, color: theme === 'light' ? '#000' : '#fff' }}>{t}</p><p style={{ fontSize: 13, color: theme === 'light' ? '#666' : 'var(--text-light)' }}>{d}</p></div>
             </div>
           ))}
         </div>
       </div>
       {/* Right form */}
-      <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 32 }}>
-        <div style={{ width: '100%', maxWidth: 430, background: 'rgba(21,42,74,0.9)', borderRadius: 20, border: '1px solid var(--border)', padding: 36, boxShadow: '0 24px 64px rgba(0,0,0,0.5)', animation: 'fadeIn 0.35s ease' }}>
+      <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 32, position: 'relative', background: theme === 'light' ? '#ffffff' : 'transparent' }}>
+        <label style={{ position: 'absolute', top: 24, right: 24, display: 'inline-flex', alignItems: 'center', width: 44, height: 24 }}>
+          <input type="checkbox" checked={theme === 'dark'} onChange={toggleTheme} style={{ position: 'absolute', opacity: 0, width: 0, height: 0 }} />
+          <span style={{ position: 'absolute', inset: 0, borderRadius: 9999, background: theme === 'dark' ? 'var(--teal)' : 'rgba(15,23,42,0.12)', transition: 'background 0.2s' }} />
+          <span style={{ position: 'absolute', left: theme === 'dark' ? '20px' : '4px', top: '4px', width: 16, height: 16, borderRadius: '50%', background: '#fff', transition: 'left 0.2s' }} />
+        </label>
+        <div style={{ width: '100%', maxWidth: 430, background: theme === 'light' ? '#ffffff' : 'rgba(21,42,74,0.9)', borderRadius: 20, border: theme === 'light' ? '1px solid #e0e0e0' : '1px solid var(--border)', padding: 36, boxShadow: theme === 'light' ? '0 2px 8px rgba(0,0,0,0.1)' : '0 24px 64px rgba(0,0,0,0.5)', animation: 'fadeIn 0.35s ease' }}>
           {children}
         </div>
       </div>
@@ -35,7 +40,7 @@ function Panel({ children }) {
 }
 
 export function LoginPage({ onSwitch }) {
-  const { login } = useApp();
+  const { login, theme, toggleTheme } = useApp();
   const [f, setF] = useState({ email: '', password: '' });
   const [err, setErr] = useState('');
   const [loading, setLoading] = useState(false);
@@ -52,22 +57,22 @@ export function LoginPage({ onSwitch }) {
   };
 
   return (
-    <Panel>
-      <h2 style={{ fontSize: 26, marginBottom: 4 }}>Welcome back</h2>
-      <p style={{ color: 'var(--text-light)', fontSize: 13, marginBottom: 26 }}>Sign in to your MediBook account</p>
+    <Panel theme={theme} toggleTheme={toggleTheme}>
+      <h2 style={{ fontSize: 26, marginBottom: 4, color: theme === 'light' ? '#000' : '#fff' }}>Welcome back</h2>
+      <p style={{ color: theme === 'light' ? '#666' : 'var(--text-light)', fontSize: 13, marginBottom: 26 }}>Sign in to your MediBook account</p>
       {err && <div style={{ background: 'rgba(224,92,92,0.1)', border: '1px solid rgba(224,92,92,0.3)', borderRadius: 9, padding: '10px 14px', marginBottom: 16, fontSize: 13, color: 'var(--danger)' }}>{err}</div>}
       <form onSubmit={go}>
         <Input label="Email" type="email" placeholder="you@email.com" value={f.email} onChange={e => { setF(p=>({...p,email:e.target.value})); setErr(''); }} />
         <Input label="Password" type="password" placeholder="••••••••" value={f.password} onChange={e => { setF(p=>({...p,password:e.target.value})); setErr(''); }} />
         <Btn type="submit" disabled={loading} style={{ width:'100%', padding:'12px', marginTop:4, justifyContent:'center' }}>{loading ? 'Signing in…' : 'Sign In'}</Btn>
       </form>
-      <p style={{ textAlign:'center', marginTop:20, fontSize:13, color:'var(--text-light)' }}>No account? <span onClick={onSwitch} style={{ color:'var(--teal)', cursor:'pointer', fontWeight:600 }}>Register here</span></p>
+      <p style={{ textAlign:'center', marginTop:20, fontSize:13, color: theme === 'light' ? '#666' : 'var(--text-light)' }}>No account? <span onClick={onSwitch} style={{ color:'var(--teal)', cursor:'pointer', fontWeight:600 }}>Register here</span></p>
     </Panel>
   );
 }
 
 export function RegisterPage({ onSwitch }) {
-  const { register } = useApp();
+  const { register, theme, toggleTheme } = useApp();
   const [f, setF] = useState({ name:'', email:'', phone:'', dob:'', gender:'', address:'', blood:'', allergies:'', medical_info:'', password:'', confirm:'' });
   const [errs, setErrs] = useState({});
   const [loading, setLoading] = useState(false);
@@ -131,9 +136,9 @@ export function RegisterPage({ onSwitch }) {
   const fld = k => ({ value: f[k], onChange: e => { setF(p=>({...p,[k]:e.target.value})); setErrs(p=>({...p,[k]:''})); }, error: errs[k] });
 
   return (
-    <Panel>
-      <h2 style={{ fontSize: 26, marginBottom: 4 }}>Create account</h2>
-      <p style={{ color:'var(--text-light)', fontSize:13, marginBottom:22 }}>Join MediBook as a patient</p>
+    <Panel theme={theme} toggleTheme={toggleTheme}>
+      <h2 style={{ fontSize: 26, marginBottom: 4, color: theme === 'light' ? '#000' : '#fff' }}>Create account</h2>
+      <p style={{ color: theme === 'light' ? '#666' : 'var(--text-light)', fontSize:13, marginBottom:22 }}>Join MediBook as a patient</p>
       <form onSubmit={go}>
         <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:'0 14px' }}>
           <Input label="Full Name" placeholder="Rahul Sharma" {...fld('name')} />
@@ -143,8 +148,8 @@ export function RegisterPage({ onSwitch }) {
         <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:'0 14px' }}>
           <Input label="Date of Birth" type="date" {...fld('dob')} />
           <div style={{ marginBottom:16 }}>
-            <label style={{ display:'block', fontSize:12, color:'var(--text-light)', marginBottom:5, fontWeight:500, textTransform:'uppercase', letterSpacing:'0.04em' }}>Gender</label>
-            <select value={f.gender} onChange={e=>setF(p=>({...p,gender:e.target.value}))} style={{ width:'100%', padding:'10px 13px', background:'var(--surface)', border:'1.5px solid var(--surface-border)', borderRadius:9, color:'var(--surface-text)', fontSize:14, appearance:'none', WebkitAppearance:'none', MozAppearance:'none' }}>
+            <label style={{ display:'block', fontSize:12, color: theme === 'light' ? '#666' : 'var(--text-light)', marginBottom:5, fontWeight:500, textTransform:'uppercase', letterSpacing:'0.04em' }}>Gender</label>
+            <select value={f.gender} onChange={e=>setF(p=>({...p,gender:e.target.value}))} style={{ width:'100%', padding:'10px 13px', background: theme === 'light' ? '#f5f5f5' : 'var(--surface)', border: theme === 'light' ? '1.5px solid #ddd' : '1.5px solid var(--surface-border)', borderRadius:9, color: theme === 'light' ? '#000' : 'var(--surface-text)', fontSize:14, appearance:'none', WebkitAppearance:'none', MozAppearance:'none' }}>
               <option value="">Select</option><option value="male">Male</option><option value="female">Female</option><option value="other">Other</option>
             </select>
           </div>
@@ -152,8 +157,8 @@ export function RegisterPage({ onSwitch }) {
         <Input label="Address" placeholder="123 Main street" value={f.address} onChange={e => setF(p => ({ ...p, address: e.target.value }))} />
         <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:'0 14px' }}>
           <div style={{ marginBottom:16 }}>
-            <label style={{ display:'block', fontSize:12, color:'var(--text-light)', marginBottom:5, fontWeight:500, textTransform:'uppercase', letterSpacing:'0.04em' }}>Blood Group</label>
-            <select value={f.blood} onChange={e => setF(p => ({ ...p, blood: e.target.value }))} style={{ width:'100%', padding:'10px 13px', background:'var(--surface)', border:'1.5px solid var(--surface-border)', borderRadius:9, color:'var(--surface-text)', fontSize:14, appearance:'none', WebkitAppearance:'none', MozAppearance:'none' }}>
+            <label style={{ display:'block', fontSize:12, color: theme === 'light' ? '#666' : 'var(--text-light)', marginBottom:5, fontWeight:500, textTransform:'uppercase', letterSpacing:'0.04em' }}>Blood Group</label>
+            <select value={f.blood} onChange={e => setF(p => ({ ...p, blood: e.target.value }))} style={{ width:'100%', padding:'10px 13px', background: theme === 'light' ? '#f5f5f5' : 'var(--surface)', border: theme === 'light' ? '1.5px solid #ddd' : '1.5px solid var(--surface-border)', borderRadius:9, color: theme === 'light' ? '#000' : 'var(--surface-text)', fontSize:14, appearance:'none', WebkitAppearance:'none', MozAppearance:'none' }}>
               <option value="">Select</option>
               {['A+','A-','B+','B-','AB+','AB-','O+','O-'].map(b => <option key={b} value={b}>{b}</option>)}
             </select>
@@ -167,7 +172,7 @@ export function RegisterPage({ onSwitch }) {
         </div>
         <Btn type="submit" disabled={loading} style={{ width:'100%', padding:'12px', marginTop:4, justifyContent:'center' }}>{loading ? 'Creating…' : 'Create Account'}</Btn>
       </form>
-      <p style={{ textAlign:'center', marginTop:18, fontSize:13, color:'var(--text-light)' }}>Have an account? <span onClick={onSwitch} style={{ color:'var(--teal)', cursor:'pointer', fontWeight:600 }}>Sign in</span></p>
+      <p style={{ textAlign:'center', marginTop:18, fontSize:13, color: theme === 'light' ? '#666' : 'var(--text-light)' }}>Have an account? <span onClick={onSwitch} style={{ color:'var(--teal)', cursor:'pointer', fontWeight:600 }}>Sign in</span></p>
     </Panel>
   );
 }
