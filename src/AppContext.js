@@ -36,7 +36,7 @@ const DOCTOR_ACCOUNTS = DOCTORS_DATA.map(d => ({
   doctorId: d.id,
 }));
 
-const BACKEND_URL = 'http://13.201.83.177:5000';
+const BACKEND_URL = 'https://new.girish.sbs';
 
 const DOCTOR_ID_MAP = {
   'sharma@medibook.com': 'd1',
@@ -150,7 +150,7 @@ export function AppProvider({ children }) {
   /* ───── Auth ───── */
   const register = async (data) => {
     try {
-      const resp = await fetch('http://13.201.83.177:5000/api/auth/register', {
+      const resp = await fetch('https://new.girish.sbs/api/auth/register', {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(data),
       });
@@ -166,7 +166,7 @@ export function AppProvider({ children }) {
 
   const login = async (email, password) => {
     try {
-      const resp = await fetch('http://13.201.83.177:5000/api/auth/login', {
+      const resp = await fetch('https://new.girish.sbs/api/auth/login', {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password }),
       });
